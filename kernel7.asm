@@ -40,8 +40,8 @@ mov r7,r0 ;back-up a copy of the screen address + channel number
 ; Draw Pixel at (X,Y)
 ;r0 = address of screen we write to (r7 = backup of screen start address)
 
-mov r4, #1 ;x ordinate
-mov r5, #1 ;y
+mov r4, #5 ;x ordinate
+mov r5, #5 ;y
 
 ;set colour - while for 8BPP, Yellow for 16BPP
 mov r9,BITS_PER_PIXEL
@@ -56,33 +56,43 @@ sp_eight:
 sp_endif:
 
 MainLoop:
-
-        lineloop:
                 push {r0-r9}
                 mov r0,r7    ;screen address
                 mov r1,r4 ;x
                 mov r2,r5 ;y
                 mov r3,r6 ;colour
                 ;assume BITS_PER_PIXEL, SCREEN_X are shared constants
-                bl drawpixel
+                bl DrawPlayer
                 pop {r0-r9}
 
-                ;increment and test
-                add r4,#1
-                mov r8,SCREEN_X AND $FF00
-                orr r8,SCREEN_X AND $00FF    ;640 = 0x0280
-                cmp r4,r8
-        bls lineloop      ;branch less than or same
-
-        mov r4,#1
-        add r5,#1
-        mov r10,SCREEN_Y AND $FF00
-        orr r10,SCREEN_Y AND $00FF    ;640 = 0x0280
-        cmp r5,r10
-bls MainLoop  ;loop forever
+b MainLoop  ;loop forever
 
 CoreLoop: ; Infinite Loop For Core 1..3
   b CoreLoop
+
+DrawPlayer:
+; 4 PARAMS
+; Screen address, x, y, colour
+     mov r4,r1
+     mov r5,r1
+     add r5,#5
+     mov r6,r2
+     add r6,#40
+     rectangleloop:
+        mov r1,r4
+        lineloop:
+              push {lr}
+              push {r0-r9}
+              bl drawpixel
+              pop {r0-r9}
+              pop {lr}
+              add r1,#1
+              cmp r1,r5
+        blo lineloop
+        add r2,#1
+        cmp r2,r6
+     blo rectangleloop
+bx lr
 
 include "FBinit8.asm"
 include "timer2_2Param.asm"

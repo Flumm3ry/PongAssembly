@@ -31,13 +31,13 @@ drawpixel:
   cmp r9,#16;
   beq dp_sixteen
  ;assume 32
-  str r6,[r0]  ;for 32-bit colour
+  str r3,[r0]  ;for 32-bit colour
   b dp_endif
 dp_sixteen:
-  strh r3,[r0]	;copy low bytes (Half) to r0
+  strh r3,[r0]  ;copy low bytes (Half) to r0
   b dp_endif
 dp_eight:
-  strb r6,[r0]	 ;for 8-bit colour
+  strb r3,[r0]   ;for 8-bit colour
 dp_endif:
 
 bx lr
