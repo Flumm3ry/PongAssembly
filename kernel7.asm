@@ -34,7 +34,7 @@ bl FB_Init
 and r0,$3FFFFFFF ; Convert Mail Box Frame Buffer Pointer From BUS Address To Physical Address ($CXXXXXXX -> $3XXXXXXX)
 str r0,[FB_POINTER] ; Store Frame Buffer Pointer Physical Address
 
-mov r7,r0 ;back-up a copy of the screen address + channel number
+mov r10,r0 ;back-up a copy of the screen address + channel number
 
 
 ; Draw Pixel at (X,Y)
@@ -58,7 +58,7 @@ sp_endif:
 MainLoop:
                 ; clear screen
                 push {r0-r3}
-                mov r0,r7
+                mov r0,r10
                 bl ClearScreen
                 pop {r0-r3}
 
@@ -71,13 +71,13 @@ MainLoop:
                 ; update ball
 
                 ; draw player
-                push {r0-r9}
-                mov r0,r7    ;screen address
+                push {r0-r6}
+                mov r0,r10    ;screen address
                 mov r1,r4 ;x
                 mov r2,r5 ;y
                 ;assume BITS_PER_PIXEL, SCREEN_X are shared constants
                 bl DrawPlayer
-                pop {r0-r9}
+                pop {r0-r6}
 
                 ; delay
                 push {r0-r9}
@@ -100,7 +100,7 @@ GetInput:
         str r2,[r0,#4]
         ldr r3,[r0,#52]
         tst r3,#1024
-        addne r0,#10
+        ;addne r0,#10
 bx lr
 
 

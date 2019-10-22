@@ -11,9 +11,9 @@ DrawPlayer:
         mov r1,r4
         lineloop:
               push {lr}
-              push {r0-r9}
+              push {r0-r10}
               bl drawpixel
-              pop {r0-r9}
+              pop {r0-r10}
               pop {lr}
               add r1,#1
               cmp r1,r5
