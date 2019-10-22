@@ -56,6 +56,13 @@ sp_eight:
 sp_endif:
 
 MainLoop:
+                push {r0-r3}
+                mov r0,r7
+                mov r3,r6
+                bl ClearScreen
+                pop {r0-r3}
+
+
                 push {r0-r9}
                 mov r0,r7    ;screen address
                 mov r1,r4 ;x
@@ -65,7 +72,6 @@ MainLoop:
                 bl DrawPlayer
                 pop {r0-r9}
 
-                add r4,#10
                 add r5,#10
 
                 push {r0-r9}
@@ -78,6 +84,22 @@ b MainLoop  ;loop forever
 CoreLoop: ; Infinite Loop For Core 1..3
   b CoreLoop
 
+ClearScreen:
+        mov r2,#1
+        mov r3,#0
+        yloop:
+                mov r1,#1
+                xloop:
+                        push {r0-r9,lr}
+                        bl drawpixel
+                        pop {r0-r9,lr}
+                        add r1,#1
+                        cmp r1,SCREEN_X
+                bls xloop
+                add r2,#1
+                cmp r2,SCREEN_Y
+        bls yloop
+bx lr
 
 include "drawplayer_2param.asm"
 include "FBinit8.asm"
