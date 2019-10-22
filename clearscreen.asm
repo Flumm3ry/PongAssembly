@@ -1,4 +1,4 @@
-ClearScreen:
+ClearScreen:    ; takes 2 params
         mov r2,#1
         mov r3,#0
         yloop:

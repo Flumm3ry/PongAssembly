@@ -56,13 +56,22 @@ sp_eight:
 sp_endif:
 
 MainLoop:
+                ; clear screen
                 push {r0-r3}
                 mov r0,r7
                 mov r3,r6
                 bl ClearScreen
                 pop {r0-r3}
 
+                ; handle input
+                push {r0-r3}
+                bl GetInput
+                add r5,r5,r0
+                pop {r0-r3}
 
+                ; update ball
+
+                ; draw player
                 push {r0-r9}
                 mov r0,r7    ;screen address
                 mov r1,r4 ;x
@@ -72,8 +81,7 @@ MainLoop:
                 bl DrawPlayer
                 pop {r0-r9}
 
-                add r5,#10
-
+                ; delay
                 push {r0-r9}
                 mov r1, $FF000
                 bl TIMER
@@ -83,6 +91,21 @@ b MainLoop  ;loop forever
 
 CoreLoop: ; Infinite Loop For Core 1..3
   b CoreLoop
+
+GetInput:
+        mov r0,#0
+        GPIO_OFFSET = $200000
+        mov r1,BASE
+        orr r1,GPIO_OFFSET ;Base address of GPIO
+        ldr r2,[r0,#4] ;read function register for GPIO 10 - 19
+        bic r2,r2,#7  ;bit clear  27 = 9 * 3    = read access
+        str r2,[r0,#4]
+        ldr r3,[r0,#52]
+        tst r3,#1024
+        addne r0,#10
+bx lr
+
+
 
 include "clearscreen.asm"
 include "drawplayer_2param.asm"
