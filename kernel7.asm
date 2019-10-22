@@ -65,6 +65,14 @@ MainLoop:
                 bl DrawPlayer
                 pop {r0-r9}
 
+                add r4,#10
+                add r5,#10
+
+                push {r0-r9}
+                mov r1, $FF000
+                bl TIMER
+                pop {r0-r9}
+
 b MainLoop  ;loop forever
 
 CoreLoop: ; Infinite Loop For Core 1..3
