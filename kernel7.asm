@@ -59,7 +59,6 @@ MainLoop:
                 ; clear screen
                 push {r0-r3}
                 mov r0,r7
-                mov r3,r6
                 bl ClearScreen
                 pop {r0-r3}
 
@@ -76,7 +75,6 @@ MainLoop:
                 mov r0,r7    ;screen address
                 mov r1,r4 ;x
                 mov r2,r5 ;y
-                mov r3,r6 ;colour
                 ;assume BITS_PER_PIXEL, SCREEN_X are shared constants
                 bl DrawPlayer
                 pop {r0-r9}
